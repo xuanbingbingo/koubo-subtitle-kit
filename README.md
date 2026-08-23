@@ -61,13 +61,14 @@ kbsub init path/to/your/src        # 拷 Subtitles.tsx / subsContext.ts / Sound.
 3. `kbsub tts` → `kbsub build` → 渲染 → `kbsub verify`
 
 ```bash
+kbsub lint  --lines vo/narration.txt --fix     # 多音字闸门（tts 会自动先跑，不过审直接拦下）
 kbsub tts   --lines vo/narration.txt --out vo/raw
 kbsub build --lines vo/narration.txt --wav vo/raw --shots shots.json \
             --out-audio public/vo --out-json src/vo.json
 kbsub verify out/film.mp4 --vo out/audio-vo-only.mp3 --window 51:6
 ```
 
-## 五条死亡红线
+## 六条死亡红线
 
 1. **字幕 ≠ 画面注解**。画面里那些"按镜头出现的说明文字"跟着镜头走，字幕必须跟着**人声**走——
    实测翻车：某镜注解 2.3s 才淡入，而首句旁白 0.3s 就开口，开头三秒纯语音无字。
@@ -76,7 +77,9 @@ kbsub verify out/film.mp4 --vo out/audio-vo-only.mp3 --window 51:6
 3. **TTS 句子会超出它所属的镜头**（中文约 3.5 字/秒）。钉帧器必须校验重叠与越界；
    顺延到镜头之外就得缩写重合成，不能硬顺。
 4. **必须以渲染产物验峰**：旁白给 1.0 实测峰值能顶到 -1.1dB。给 0.9，渲完 `kbsub verify`。
-5. **改文案＝重合成 + 重钉帧 + 重渲字幕**：音频、字幕、画面同源于一份稿子，只改一处必然对不上。
+5. **多音字要在合成前拦住**：`kbsub lint` 用一份共享词典扫稿，判不了读音就换同义词；
+   "改音不改字"的替换只进合成稿，不进字幕。等听出来再改＝整片重渲。
+6. **改文案＝重合成 + 重钉帧 + 重渲字幕**：音频、字幕、画面同源于一份稿子，只改一处必然对不上。
 
 ## 文档
 
@@ -85,6 +88,7 @@ kbsub verify out/film.mp4 --vo out/audio-vo-only.mp3 --window 51:6
 | `SKILL.md` | 作为 Claude Code skill 使用时的入口（clone 进 `~/.claude/skills/` 即可） |
 | `references/narration.md` | 旁白稿怎么写、字数怎么倒推、TTS 文案禁忌 |
 | `references/voices.md` | 音色选择与批量合成 |
+| `references/polyphones.md` | 多音字闸门：词典、三类判定、改音不改字的双轨 |
 | `references/pinning.md` | 钉帧规则与校验 |
 | `references/subtitles.md` | 字幕层规范 + 画面注解让位 |
 | `references/mixing.md` | 混音数值与验收 |

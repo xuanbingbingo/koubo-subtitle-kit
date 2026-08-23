@@ -1,0 +1,45 @@
+{
+  "_note": "多音字闸门词典 —— 所有配音管线的唯一真相源。verdict: auto_safe(放行) / auto_fix(可自动改) / needs_review(必须人/模型按语义判定)。engines 为空表示对所有引擎生效；voxvoice(本地克隆音)实测多音字表现好，多数规则对它豁免。",
+  "version": 1,
+  "rules": [
+    {
+      "id": "yi-hang",
+      "char": "行",
+      "pattern": "一行(?![\\u4e00-\\u9fa5])",
+      "readings": { "correct": "háng（一行代码）", "wrong": "xíng" },
+      "verdict": "auto_fix",
+      "engines": ["hfvoice", "edge", "sami"],
+      "why": "实测：「一行」后面紧跟汉字才念对 háng；后面是标点/英文/句尾时一律念成 xíng",
+      "replace": ["一句", "一条", "一段"],
+      "note": "或在后面补一个汉字（一行代码）"
+    },
+    {
+      "id": "sai",
+      "char": "塞",
+      "pattern": "塞(进|回|到|满|不下|得下|对)",
+      "readings": { "correct": "sāi", "wrong": "sè" },
+      "verdict": "auto_fix",
+      "engines": ["hfvoice", "edge", "sami"],
+      "speechMap": { "塞": "腮" },
+      "why": "口语「塞进去/塞回去」念 sāi，edge/SAMI 默认念 sè；腮是唯一读音 sāi",
+      "note": "🔴 只替换合成文本，字幕保持原字"
+    },
+    { "id": "zhang-chu", "char": "长", "pattern": "长(出|大|高|成)", "readings": { "correct": "zhǎng", "wrong": "cháng" }, "verdict": "needs_review", "engines": [], "why": "长出/长大是 zhǎng，长期/长度是 cháng，引擎按词频猜", "replace": ["有", "生出", "养出"] },
+    { "id": "dou-dei", "char": "得", "pattern": "(都|就|还|才)得(?![\\u5230\\u51fa\\u4ee5\\u529b\\u5931\\u610f])", "readings": { "correct": "děi（必须）", "wrong": "dé" }, "verdict": "needs_review", "engines": [], "why": "「都得拍成」的得是 děi；引擎容易念 dé", "replace": ["都要", "就要", "才要"] },
+    { "id": "chong-xin", "char": "重", "pattern": "重(新|来|做|复|渲|跑|拍)", "readings": { "correct": "chóng", "wrong": "zhòng" }, "verdict": "needs_review", "engines": [], "why": "重新/重来是 chóng，重要/重量是 zhòng", "replace": ["再"] },
+    { "id": "hai-huan", "char": "还", "pattern": "还(?=[\\u6709\\u662f\\u5f97\\u4e0d\\u53ef\\u80fd\\u4f1a\\u5728])", "readings": { "correct": "hái", "wrong": "huán" }, "verdict": "auto_safe", "engines": [], "why": "还有/还是/还会在常见语境下引擎判对，仅提示" },
+    { "id": "cha-chai", "char": "差", "pattern": "差(不多|一点|着|距|值)", "readings": { "correct": "chà", "wrong": "chāi" }, "verdict": "needs_review", "engines": [], "replace": ["相差", "少", "间隔"] },
+    { "id": "kong-dang", "char": "空", "pattern": "空(档|隙|位|出|着)", "readings": { "correct": "kòng", "wrong": "kōng" }, "verdict": "needs_review", "engines": [], "replace": ["间隔", "留白"] },
+    { "id": "qu-zi", "char": "曲", "pattern": "(曲子|一曲|歌曲|曲目)", "readings": { "correct": "qǔ", "wrong": "qū" }, "verdict": "needs_review", "engines": [], "replace": ["音乐", "配乐"] },
+    { "id": "xi-tong", "char": "系", "pattern": "系(上|好|紧)", "readings": { "correct": "jì", "wrong": "xì" }, "verdict": "needs_review", "engines": [], "replace": ["绑上", "扣好"] },
+    { "id": "shu-yi-shu", "char": "数", "pattern": "数(一数|得过来|不清|着)", "readings": { "correct": "shǔ", "wrong": "shù" }, "verdict": "needs_review", "engines": [], "replace": ["点一遍", "算不清"] },
+    { "id": "hao-qi", "char": "好", "pattern": "好(奇|客|学(?!习))", "readings": { "correct": "hào", "wrong": "hǎo" }, "verdict": "needs_review", "engines": [] },
+    { "id": "gan-huo", "char": "干", "pattern": "干(活|事|起来|脆)", "readings": { "correct": "gàn", "wrong": "gān" }, "verdict": "needs_review", "engines": [] },
+    { "id": "jia-zai", "char": "载", "pattern": "(下载|加载|装载|载入)", "readings": { "correct": "zài", "wrong": "zǎi" }, "verdict": "needs_review", "engines": [] },
+    { "id": "mo-yang", "char": "模", "pattern": "模(样|具)", "readings": { "correct": "mú", "wrong": "mó" }, "verdict": "needs_review", "engines": [], "replace": ["样子"] }
+  ],
+  "englishSafeVoices": {
+    "note": "中英混排会把英文念崩的音色不在少数（163 个剪映音色里约一半会把 Claude 念错）。已验证安全的：",
+    "safe": ["清爽男声(sami zh_male_iclvop_huaxuekepu)", "edge zh-CN-YunyangNeural", "voxvoice binge"]
+  }
+}

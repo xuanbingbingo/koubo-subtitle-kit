@@ -32,16 +32,17 @@ TTS 引擎可插拔：默认 `edge-tts`（免费无 key），检测到 `OPENAI_A
 
 可跑通的示例：`examples/minimal`（`npm i && npm run demo` 出 26 秒带旁白带字幕样片）。
 
-## 六步流程
+## 七步流程
 
 1. **写旁白稿** → `references/narration.md`
-2. **合成语音** → `references/voices.md`（默认清爽男声）
-3. **钉帧 + 校验** → `tools/vo_build.mjs`，规则见 `references/pinning.md`
-4. **加字幕层** → `assets/Subtitles.tsx`，让位规则见 `references/subtitles.md`
-5. **混音** → `references/mixing.md`（BGM 要降、旁白要闪避、必须验峰）
-6. **渲染与交付** → `references/pipeline.md`（画面渲一次、音轨渲多版、ffmpeg 封装）
+2. **过多音字闸门** → `kbsub lint [--fix]`，规则见 `references/polyphones.md`（🔴 不过审不许进合成）
+3. **合成语音** → `references/voices.md`（默认清爽男声）
+4. **钉帧 + 校验** → `kbsub build`，规则见 `references/pinning.md`
+5. **加字幕层** → `assets/Subtitles.tsx`，让位规则见 `references/subtitles.md`
+6. **混音** → `references/mixing.md`（BGM 要降、旁白要闪避、必须验峰）
+7. **渲染与交付** → `references/pipeline.md`（画面渲一次、音轨渲多版、ffmpeg 封装）
 
-## 六条死亡红线
+## 七条死亡红线
 
 1. 🔴 **字幕 ≠ 画面注解。** 画面里原本那些"按镜头出现的说明文字"不是字幕：它们的出现时机跟着镜头走，
    而字幕必须跟着**人声**走。实测翻车：某镜注解设了 `in0: 70`（2.3s 才淡入），而第一句旁白 0.3s 就开口，
@@ -60,7 +61,11 @@ TTS 引擎可插拔：默认 `edge-tts`（免费无 key），检测到 `OPENAI_A
    （ffmpeg 场景检测可能全片只报出一两处），但那不是加扫光/闪白的理由——每两三秒闪一下一律读作廉价。
    切点靠内容变化与音乐鼓点成立；要强调就改构图与景别对比，或用镜头卡自带的语法且全片 2–3 处封顶。
 
-6. 🔴 **改文案必须重合成 + 重钉帧 + 重渲字幕。** 音频、字幕、画面三者同源于同一份稿子；
+6. 🔴 **多音字必须在合成前拦住，不能等听出来再重渲。** 词典与闸门是 `polyphones.json` + `kbsub lint`，
+   **所有配音管线共用这一份**，不要在各自的文档里再抄一遍规则。判不了读音就换无歧义同义词；
+   「改音不改字」的替换只能进 `.speech.txt`，绝不能进字幕。
+
+7. 🔴 **改文案必须重合成 + 重钉帧 + 重渲字幕。** 音频、字幕、画面三者同源于同一份稿子；
    只改其中一处必然对不上（出片管线里已有同类事故：改完稿直接合成＝合出旧文本还报成功）。
 
 ## 与相关 skill 的分工

@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { arg, readLines, pad3, die } from './util.mjs';
+import fs2 from 'fs';
+import { arg, flag, readLines, pad3, die } from './util.mjs';
+import { scanLine } from './lint.mjs';
 
 const BUILTIN = ['edge', 'openai', 'hfvoice', 'voxvoice'];
 
@@ -14,7 +16,24 @@ export const loadAdapter = async (id) => {
 export const pickEngine = () => (process.env.OPENAI_API_KEY ? 'openai' : 'edge');
 
 export async function cmdTts() {
-  const lines = readLines(arg('lines', 'vo/narration.txt'));
+  const linesFile = arg('lines', 'vo/narration.txt');
+  // 🔴 合成前闸门：多音字未过审不许进合成（重渲一次的代价远大于改一个词）
+  const speechFileEarly = linesFile.replace(/\.txt$/, '.speech.txt');
+  if (!flag('no-lint')) {
+    const engineForLint = arg('engine', pickEngine());
+    // 闸门要检查"真正会被念出来的那份稿子"：有读音映射稿就查它
+    const gateFile = fs2.existsSync(speechFileEarly) ? speechFileEarly : linesFile;
+    const pending = readLines(gateFile)
+      .map((t, i) => ({ i, hits: scanLine(t, engineForLint).filter((h) => h.rule.verdict !== 'auto_safe') }))
+      .filter((x) => x.hits.length);
+    if (pending.length) {
+      console.error(`✗ 有 ${pending.length} 句存在多音字风险（检查的是 ${gateFile}），先跑：kbsub lint --lines ${linesFile} [--fix]`);
+      console.error('  （确认无碍可加 --no-lint 跳过，但请先想清楚重渲的代价）');
+      process.exit(1);
+    }
+  }
+  // 有读音映射稿就用它合成，字幕仍用原稿
+  const lines = readLines(fs2.existsSync(speechFileEarly) ? speechFileEarly : linesFile);
   const out = arg('out', 'vo/raw');
   const engineId = arg('engine', pickEngine());
   const adapter = await loadAdapter(engineId);
