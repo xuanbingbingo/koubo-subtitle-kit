@@ -10,5 +10,4 @@ vo/qs/
 vo/wav/
 public/vo/
 public/vo-qs/
-examples/minimal/src/vo.json
 examples/minimal/out/
