@@ -6,7 +6,22 @@ import { arg, flag, readLines, die } from './util.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const DICT = JSON.parse(fs.readFileSync(path.join(HERE, '..', 'polyphones.json'), 'utf8'));
 
-const applies = (rule, engine) => !rule.engines?.length || rule.engines.includes(engine);
+/** 引擎别名归一：各管线叫法不同（wvp 叫 edge-tts、hf-video 叫 sami/剪映…），
+ *  不归一会让规则被静默跳过——实测 wvp 传 'edge-tts' 时「塞」那条整个失效。 */
+const ALIASES = {
+  edge: ['edge', 'edge-tts', 'edgetts', 'microsoft', 'azure-edge'],
+  openai: ['openai', 'openai-tts', 'gpt-4o-mini-tts', 'tts-1'],
+  sami: ['sami', 'jianying', '剪映', 'hfvoice-sami'],
+  hfvoice: ['hfvoice', '清爽', '清爽男声'],
+  voxvoice: ['voxvoice', 'voxcpm', 'binge', '克隆音'],
+};
+export const normalizeEngine = (id = '') => {
+  const low = String(id).toLowerCase();
+  for (const [canon, names] of Object.entries(ALIASES)) if (names.some((n) => low === n.toLowerCase())) return canon;
+  for (const [canon, names] of Object.entries(ALIASES)) if (names.some((n) => low.includes(n.toLowerCase()))) return canon;
+  return low;
+};
+const applies = (rule, engine) => !rule.engines?.length || rule.engines.map(normalizeEngine).includes(normalizeEngine(engine));
 
 /** 扫一行，返回命中列表 */
 export function scanLine(text, engine) {
