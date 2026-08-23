@@ -39,7 +39,7 @@ const duckGain = (f: number, cues: Cue[]) => {
 ## 验收：以渲染产物验，不信预览
 
 ```bash
-kbsub verify out/xxx-vo.mp4 --vo out/audio-vo-only.mp3 --window 51:6
+kbsub verify out/xxx-vo.mp4 --vo out/audio-vo-only.mp3 --cues src/vo.json
 ```
 
 - 峰值要 ≤ **-1.5dB**（留余量）；到 -1.1dB 就把旁白从 1.0 降到 0.9

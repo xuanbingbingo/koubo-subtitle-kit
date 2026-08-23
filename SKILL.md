@@ -23,7 +23,7 @@ kbsub doctor                  # 检查 ffmpeg / TTS 引擎 / python
 kbsub init <src目录>          # 把 Subtitles.tsx 等组件拷进目标 Remotion 工程
 kbsub tts   --lines vo/narration.txt --out vo/raw [--engine edge|openai|./my.mjs] [--only 8,9]
 kbsub build --lines vo/narration.txt --wav vo/raw --shots shots.json --out-audio public/vo --out-json src/vo.json
-kbsub verify 成片.mp4 [--vo 无BGM有旁白.mp3 --window 51:6]
+kbsub verify 成片.mp4 [--vo 无BGM有旁白.mp3 --cues src/vo.json]
 ```
 
 TTS 引擎可插拔：默认 `edge-tts`（免费无 key），检测到 `OPENAI_API_KEY` 自动切 OpenAI；
@@ -41,7 +41,7 @@ TTS 引擎可插拔：默认 `edge-tts`（免费无 key），检测到 `OPENAI_A
 5. **混音** → `references/mixing.md`（BGM 要降、旁白要闪避、必须验峰）
 6. **渲染与交付** → `references/pipeline.md`（画面渲一次、音轨渲多版、ffmpeg 封装）
 
-## 五条死亡红线
+## 六条死亡红线
 
 1. 🔴 **字幕 ≠ 画面注解。** 画面里原本那些"按镜头出现的说明文字"不是字幕：它们的出现时机跟着镜头走，
    而字幕必须跟着**人声**走。实测翻车：某镜注解设了 `in0: 70`（2.3s 才淡入），而第一句旁白 0.3s 就开口，
@@ -56,7 +56,11 @@ TTS 引擎可插拔：默认 `edge-tts`（免费无 key），检测到 `OPENAI_A
 4. 🔴 **必须以渲染产物验峰。** 旁白 1.0 + BGM + SFX 实测峰值能顶到 -1.1dB。旁白给 0.9、渲完跑
    `volumedetect`，峰值留 ≥1.5dB 余量。预览里的电平不算数。
 
-5. 🔴 **改文案必须重合成 + 重钉帧 + 重渲字幕。** 音频、字幕、画面三者同源于同一份稿子；
+5. 🔴 **不要为"让切点可见"给每个镜头加统一光效。** 深色同色系的片子硬切在画面上确实不明显
+   （ffmpeg 场景检测可能全片只报出一两处），但那不是加扫光/闪白的理由——每两三秒闪一下一律读作廉价。
+   切点靠内容变化与音乐鼓点成立；要强调就改构图与景别对比，或用镜头卡自带的语法且全片 2–3 处封顶。
+
+6. 🔴 **改文案必须重合成 + 重钉帧 + 重渲字幕。** 音频、字幕、画面三者同源于同一份稿子；
    只改其中一处必然对不上（出片管线里已有同类事故：改完稿直接合成＝合出旧文本还报成功）。
 
 ## 与相关 skill 的分工

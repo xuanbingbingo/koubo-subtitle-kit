@@ -12,7 +12,7 @@ koubo-subtitle-kit — 给已锁定画面的视频加解说旁白 + 逐句字幕
   kbsub init <src目录>              把 Subtitles.tsx 等组件拷进你的 Remotion 工程
   kbsub tts    --lines vo/narration.txt --out vo/raw [--engine edge|openai|<自定义.mjs>] [--voice X] [--only 8,9]
   kbsub build  --lines vo/narration.txt --wav vo/raw --shots shots.json --out-audio public/vo --out-json src/vo.json
-  kbsub verify 成片.mp4 [--vo 无BGM有旁白.mp3 --window 51:6]
+  kbsub verify 成片.mp4 [--vo 无BGM有旁白.mp3 --cues src/vo.json]
 
 流程：写稿(=画面字幕口语化) → tts → build(钉帧+校验) → 渲染 → verify → 交付三版
 文档：SKILL.md 与 references/*.md ；示例工程：examples/minimal
