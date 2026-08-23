@@ -1,0 +1,14 @@
+node_modules/
+out/
+*.mp4
+*.mp3
+*.wav
+!examples/minimal/public/audio/.gitkeep
+.DS_Store
+vo/raw/
+vo/qs/
+vo/wav/
+public/vo/
+public/vo-qs/
+examples/minimal/src/vo.json
+examples/minimal/out/

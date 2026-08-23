@@ -1,0 +1,13 @@
+{
+  "name": "koubo-subtitle-kit",
+  "version": "0.1.0",
+  "description": "给已锁定画面的视频加解说旁白 + 逐句字幕，并完成混音与交付。TTS 引擎可插拔（edge-tts / OpenAI / 自带）。Add narration + per-line subtitles to an already-finished video: TTS, frame pinning, ducking, subtitle layer, mix verification.",
+  "type": "module",
+  "bin": { "kbsub": "bin/kbsub.mjs" },
+  "files": ["bin", "src", "assets", "references", "tools", "SKILL.md", "README.md"],
+  "engines": { "node": ">=18" },
+  "keywords": ["remotion", "subtitles", "tts", "voiceover", "video", "edge-tts", "claude-skill"],
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/xuanbingbingo/koubo-subtitle-kit" },
+  "scripts": { "doctor": "node bin/kbsub.mjs doctor" }
+}
