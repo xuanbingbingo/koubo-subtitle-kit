@@ -5,10 +5,12 @@ import { cmdBuild } from '../src/build.mjs';
 import { cmdVerify } from '../src/verify.mjs';
 import { cmdInit } from '../src/init.mjs';
 import { cmdLint } from '../src/lint.mjs';
+import { cmdSetup } from '../src/setup.mjs';
 
 const HELP = `
 koubo-subtitle-kit — 给已锁定画面的视频加解说旁白 + 逐句字幕
 
+  kbsub setup                       一键装好两个 skill（本 kit + 上游 video-shotcraft 画面段）
   kbsub doctor                      检查依赖（ffmpeg / TTS 引擎 / python）
   kbsub init <src目录>              把 Subtitles.tsx 等组件拷进你的 Remotion 工程
   kbsub lint   --lines vo/narration.txt [--fix] [--engine edge]   合成前多音字闸门（tts 会自动先跑）
@@ -23,6 +25,7 @@ koubo-subtitle-kit — 给已锁定画面的视频加解说旁白 + 逐句字幕
 const cmd = process.argv[2];
 const main = async () => {
   switch (cmd) {
+    case 'setup': return cmdSetup();
     case 'doctor': return cmdDoctor();
     case 'lint': return cmdLint();
     case 'tts': return cmdTts();

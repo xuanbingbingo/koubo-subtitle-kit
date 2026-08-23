@@ -10,7 +10,26 @@
 
 ---
 
-## 30 秒跑通
+## 一句话出完整片（画面 + 解说）
+
+```bash
+git clone https://github.com/xuanbingbingo/koubo-subtitle-kit.git && cd koubo-subtitle-kit
+npm link && kbsub setup      # 装好本 kit + 上游 video-shotcraft（画面段）
+```
+
+然后对 Claude Code 说一句：
+
+> 「给我的 XXX 项目做支产品宣传片，要带解说和字幕」
+
+它会自动分两段跑完：`video-shotcraft` 出画面（镜头配方卡 / 2.5D 运镜 / 卡点 / SFX）
+→ 本 kit 出解说版（旁白 / 逐句字幕 / 闪避混音 / 三版交付）。**画面只渲一次**，解说版不重做画面。
+
+只要画面：说「做支宣传片」　｜　只要解说（片子已有）：说「给这支片加解说」
+
+> 画面那一段由上游 [video-shotcraft](https://github.com/Vincentwei1021/video-shotcraft)（Apache-2.0，作者 Wei Yihao）提供，
+> 本仓库不分发其副本，只负责把它装到位并衔接流水线。两段之间只交接一份 `shots.json`（画面时间线）。
+
+## 30 秒跑通（只跑解说这一段）
 
 ```bash
 git clone https://github.com/xuanbingbingo/koubo-subtitle-kit.git
