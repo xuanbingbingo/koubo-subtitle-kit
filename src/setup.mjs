@@ -42,8 +42,9 @@ export function cmdSetup() {
   } else if (!has('git')) {
     console.log(`  ✗ 没有 git，无法安装 ${UPSTREAM.name}；手动：git clone ${UPSTREAM.url} ${up}`);
   } else {
-    console.log(`  … 正在 clone ${UPSTREAM.name}（Apache-2.0，作者 Wei Yihao）`);
-    let r = run('git', ['clone', '--depth', '1', UPSTREAM.url, up]);
+    console.log(`  … 正在 clone ${UPSTREAM.name}（Apache-2.0，作者 Wei Yihao；仓库约 45MB，可能要一两分钟）`);
+    // 连不上时别让人空等：把连接超时收到 15s，失败立刻换 SSH（默认要卡 75s）
+    let r = run('git', ['-c', 'http.connectTimeout=15', 'clone', '--depth', '1', UPSTREAM.url, up]);
     if (r.status !== 0) {
       console.log(`  · HTTPS 不通，换 SSH 再试：${(r.stderr || '').trim().split('\n').slice(-1)[0]}`);
       fs.rmSync(up, { recursive: true, force: true });
