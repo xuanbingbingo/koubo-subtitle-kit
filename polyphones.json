@@ -266,6 +266,24 @@
    "replace": [
     "样子"
    ]
+  },
+  {
+   "id": "chatgpt",
+   "char": "ChatGPT",
+   "pattern": "ChatGPT",
+   "readings": {
+    "correct": "Chat GPT（分开念）",
+    "wrong": "连读念错"
+   },
+   "verdict": "auto_fix",
+   "engines": [
+    "sami"
+   ],
+   "speechMap": {
+    "ChatGPT": "Chat GPT"
+   },
+   "why": "2026-10-01 用户实听：剪映「沉稳解说」(BV701) 把连写的 ChatGPT 念错；A/B 五种写法里用户选「Chat GPT」（中间加空格）",
+   "note": "🔴 只替换合成文本，字幕保持 ChatGPT"
   }
  ],
  "englishSafeVoices": {
