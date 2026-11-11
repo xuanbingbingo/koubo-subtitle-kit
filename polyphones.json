@@ -316,10 +316,29 @@
     "hfvoice"
    ],
    "speechMap": {
+    "GIF。": "Gif ，",
     "GIF": "Gif"
    },
-   "why": "2026-11-12 老板实听《Codex能做GIF》成片说 GIF 读错；A/B 五种写法（GIF/gif/Gif/G-I-F/吉夫）里老板选「Gif」（首字母大写）",
+   "why": "2026-11-12 老板实听《Codex能做GIF》成片说 GIF 读错；A/B 五种写法（GIF/gif/Gif/G-I-F/吉夫）里老板选「Gif」（首字母大写）；2026-11-12 再踩：句尾「Gif。」被本机克隆男1吞掉最后一个词（第3句「会动的Gif。」听成「会动的技术」、「还没开通Gif。」听成「开通这儿」），A/B 五种句尾写法后只有「Gif ，」（空格+逗号）两句都念完整（「Gif 。」第3句行、第10句仍吞）",
    "note": "🔴 只替换合成文本，字幕保持 GIF"
+  },
+  {
+   "id": "guan-qia",
+   "char": "卡",
+   "pattern": "关卡",
+   "readings": {
+    "correct": "qiǎ（guānqiǎ）",
+    "wrong": "不清/听成「关系」"
+   },
+   "verdict": "needs_review",
+   "engines": [],
+   "why": "2026-11-12 实测：hfvoice 本机克隆女1 念「雨天港口关卡」，整条和单句 whisper 都两次听成「关系」；证据是 ASR 不是人耳，用户未实听",
+   "replace": [
+    "地图",
+    "场景",
+    "一关"
+   ],
+   "note": "游戏语境改说「地图 / 场景 / 一关」；改的是字，字幕同步改"
   }
  ],
  "englishSafeVoices": {
